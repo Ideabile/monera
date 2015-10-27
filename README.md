@@ -4,9 +4,8 @@
 In short, you should have docker installed.
 And then you could do:
 ```
-git clone git@github.com:Ideabile/monera.git && \
+git clone git@github.com:Ideabile/monera.git --recursive && \
 cd monera &&
-git submodule init && \
 make
 ```
 
