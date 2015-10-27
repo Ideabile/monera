@@ -1,0 +1,9 @@
+[submodule "generator"]
+	path = generator
+	url = git@github.com:M3kH/monera-generator.git
+[submodule "style"]
+	path = style
+	url = git@github.com:Ideabile/monera-style.git
+[submodule "content"]
+	path = content
+	url = git@github.com:Ideabile/monera-docs.git
