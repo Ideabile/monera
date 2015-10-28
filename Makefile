@@ -15,7 +15,7 @@ publish: docker-compose.yml
 	git add www && \
 	git commit -am "Deploy on gh-pages" && \
 	git subtree split --prefix www -b gh-pages && \
-	git push -f origin gh-pages:gh-pages
+	git push -f origin gh-pages:gh-pages && \
 	git checkout master && \
 	git submodule update --init
 
