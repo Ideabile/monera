@@ -11,7 +11,6 @@ publish: docker-compose.yml
 	git branch -D gh-pages 2>/dev/null || true && \
 	git branch -D draft 2>/dev/null || true && \
 	git checkout -b draft && \
-	git rm -rf . && \
 	git add www && \
 	git commit -am "Deploy on gh-pages" && \
 	git subtree split --prefix www -b gh-pages && \
