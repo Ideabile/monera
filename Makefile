@@ -19,7 +19,7 @@ publish: docker-compose.yml
 	git checkout master && \
 	git submodule update --init
 
-stop: www
+stop: docker-compose.yml
 	docker-compose kill && \
 	docker-compose rm -f
 
