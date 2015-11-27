@@ -8,10 +8,6 @@ language: node_js
 git:
     submodules: false
 
-before_install:
-    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-    - find . -type f -name '.gitmodules' -exec your_script {} \;
-
 install: make install
 
 script: make build
