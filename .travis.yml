@@ -2,6 +2,12 @@ sudo: required
 
 language: node_js
 
+git:
+    submodules: false
+
+before_install:
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+
 services:
   - docker
 
