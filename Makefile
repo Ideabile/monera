@@ -29,8 +29,6 @@ publish-gh-pages: docker-compose.yml
 	git commit -am "Deploy on gh-pages" && \
 	git subtree split --prefix www -b gh-pages && \
 	git checkout origin/master -- ./CNAME && \
-	git add ./CNAME && \
-	git commit -am "Add latest CNAME" && \
 	git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
 
 stop: docker-compose.yml
