@@ -11,24 +11,16 @@ server-stop: www/index.html
 	docker-compose kill www
 
 update-modules: .gitmodules
-	cd generator && \
+	cd static-transformer && \
 	git fetch --all && \
 	git reset --hard origin/master && \
-	cd ../style && \
-	git fetch --all && \
-	git reset --hard origin/master && \
-	cd ../ && \
 	git commit -am 'Update submodules' && \
 	git push origin $(git rev-parse --abbrev-ref HEAD)
 
-dev: docker-compose.yml
-	mkdir -p ./www && \
-	docker-compose run generator dev
-
 build: docker-compose.yml
 	mkdir -p ./www && \
-	docker-compose build generator && \
-	docker-compose run generator build
+	docker-compose build static-transformer && \
+	docker-compose run static-transformer build
 
 publish-gh-pages: docker-compose.yml
 	git branch -D gh-pages 2>/dev/null || true && \

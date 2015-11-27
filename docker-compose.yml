@@ -5,8 +5,8 @@ www:
   volumes:
     - ./www/:/usr/share/nginx/html
 
-generator:
-  build: ./generator
+static-transformer:
+  build: ./static-transformer
   volumes:
     - ./content:/content
     - ./www:/dest
