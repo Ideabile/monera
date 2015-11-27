@@ -1,0 +1,12 @@
+sudo: required
+
+services:
+  - docker
+
+install: make install
+
+script: make build
+
+after_success:
+  - make publish-gh-pages
+  - make update-modules
