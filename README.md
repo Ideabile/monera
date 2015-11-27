@@ -1,4 +1,4 @@
-# Monera
+# Monera [![Build Status](https://travis-ci.org/Ideabile/monera.svg?branch=master)](https://travis-ci.org/Ideabile/monera)
 **Working in progress** for a Kingdom that contained unicellular organisms.
 
 In short, you should have docker installed.
