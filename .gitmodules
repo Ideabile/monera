@@ -1,3 +1,0 @@
-[submodule "monera-static-transformer"]
-	path = static-transformer
-	url = git@github.com:Ideabile/monera-static-transformer.git
