@@ -1,5 +1,8 @@
 sudo: required
 
+services:
+- docker
+
 language: node_js
 
 git:
@@ -7,9 +10,7 @@ git:
 
 before_install:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-
-services:
-  - docker
+    - find . -type f -name '.gitmodules' -exec your_script {} \;
 
 install: make install
 
