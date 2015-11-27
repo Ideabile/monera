@@ -1,6 +1,3 @@
-install: .gitmodules
-	git submodule update --init --recursive
-
 clean: www/index.html
 	rm -rf www/*
 
@@ -23,6 +20,8 @@ build: docker-compose.yml
 	docker-compose run static-transformer build
 
 publish-gh-pages: docker-compose.yml
+	git config user.name "Travis CI" && \
+	git config user.email "info@ideabile.com" && \
 	git branch -D gh-pages 2>/dev/null || true && \
 	git branch -D draft 2>/dev/null || true && \
 	git checkout -b draft && \
@@ -32,9 +31,7 @@ publish-gh-pages: docker-compose.yml
 	git checkout origin/master -- ./CNAME && \
 	git add ./CNAME && \
 	git commit -am "Add latest CNAME" && \
-	git push -f origin gh-pages:gh-pages && \
-	git checkout master && \
-	git submodule update --init
+	git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
 
 stop: docker-compose.yml
 	docker-compose kill && \

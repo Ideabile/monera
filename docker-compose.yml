@@ -6,7 +6,7 @@ www:
     - ./www/:/usr/share/nginx/html
 
 static-transformer:
-  build: ./static-transformer
+  image: ideabile/monera-static-transformer
   volumes:
     - ./content:/content
     - ./www:/dest
