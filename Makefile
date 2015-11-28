@@ -28,15 +28,11 @@ publish-gh-pages: docker-compose.yml
 	git branch -D gh-pages 2>/dev/null || true && \
 	git branch -D draft 2>/dev/null || true && \
 	git checkout -b draft && \
-	git add -f ./www && \
-	sudo chmod -R g+w . && \
+	cp CNAME www/CNAME && \
+	git add -f www && \
 	git commit -am "Deploy on gh-pages -- start" && \
 	git subtree split --prefix www -b gh-pages && \
-	git checkout -f gh-pages && \
-	curl "${CNAME}" --output ./CNAME && \
-	git add . && \
-	git commit -am "Deploy on gh-pages -- publish" && \
-	git push --force "https://${GH_TOKEN}@${GH_REF}.git" gh-pages > /dev/null 2>&1
+	git push --force "https://${GH_TOKEN}@${GH_REF}.git" gh-pages:gh-pages > /dev/null 2>&1
 
 stop: docker-compose.yml
 	@docker-compose kill && \
