@@ -32,7 +32,7 @@ publish-gh-pages: docker-compose.yml
 	sudo chmod -R g+w . && \
 	git commit -am "Deploy on gh-pages -- start" && \
 	git subtree split --prefix www -b gh-pages && \
-	git checkout gh-pages && \
+	git checkout -f gh-pages && \
 	curl "${CNAME}" --output ./CNAME && \
 	git add . && \
 	git commit -am "Deploy on gh-pages -- publish" && \
