@@ -29,7 +29,7 @@ publish-gh-pages: docker-compose.yml
 	git commit -am "Deploy on gh-pages -- start" && \
 	git subtree split --prefix www -b gh-pages && \
 	git checkout gh-pages && \
-	curl $CNAME --output ./CNAME && \
+	curl "${CNAME}" --output ./CNAME && \
 	git add . && \
 	git commit -am "Deploy on gh-pages -- publish" && \
 	git push --force "https://${GH_TOKEN}@${GH_REF}.git" gh-pages > /dev/null 2>&1
