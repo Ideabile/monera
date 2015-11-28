@@ -1,5 +1,8 @@
-clean: www/index.html
-	@rm -rf www/*
+clean: www
+	@rm -rf www/* 2>/dev/null && \
+	docker stop `docker ps -lq` || true && \
+	docker rm `docker ps -lq` || true && \
+	docker rmi `docker images -qa` || true
 
 server: www/index.html
 	@docker-compose up -d www
@@ -16,7 +19,7 @@ update-modules: .gitmodules
 
 build: docker-compose.yml
 	@mkdir -p ./www && \
-	docker-compose build static-transformer && \
+	docker-compose build --no-cache static-transformer && \
 	docker-compose run static-transformer build
 
 publish-gh-pages: docker-compose.yml
