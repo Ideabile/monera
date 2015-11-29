@@ -62,7 +62,7 @@ Every change on master would recreate your gh-pages branch. Enjoy :-)
 
 ## Other organisms
 
-  - [monera-transformer](http://github.io/Ideabile/monera-transformer) - The first organism, a static trasformer for your ui's.
+  - [monera-transformer](https://github.com/Ideabile/monera-static-transformer) - The first organism, a static trasformer for your ui's.
 
 ## Credits
 
