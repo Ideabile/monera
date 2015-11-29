@@ -31,11 +31,12 @@ We suggest to take a look to the Organism list bellow that monera is officially 
 Or you can suggest/submit new Organism.
 
 You can still apply your contributions to this repo by:
-1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
+
+  1. Fork it!
+  2. Create your feature branch: `git checkout -b my-new-feature`
+  3. Commit your changes: `git commit -am 'Add some feature'`
+  4. Push to the branch: `git push origin my-new-feature`
+  5. Submit a pull request :D
 
 ## Development
 We require you to have `npm` and `node` installed to make able to install [`browser-sync`](http://www.browsersync.io/),
@@ -49,16 +50,18 @@ Now you can do your changes in the content, and when you save them they would be
 
 ## Create your first website with Travis and Github Pages
 This documentation is a live example in how you could change your
-1. Fork it!
-2. Create a [GitHub Authentication token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
-3. Add your repository to travis.
-4. Add your `GH_TOKEN` to travis `travis encrypt GH_TOKEN=secretvalue`
-5. Commit and push.
-6. Enjoy your website at `http://<username>.github.io/<repo-name>/`
+
+  1. Fork it!
+  2. Create a [GitHub Authentication token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
+  3. Add your repository to travis.
+  4. Add your `GH_TOKEN` to travis `travis encrypt GH_TOKEN=secretvalue`
+  5. Commit and push.
+  6. Enjoy your website at `http://<username>.github.io/<repo-name>/`
 
 Every change on master would recreate your gh-pages branch. Enjoy :-)
 
 ## Other organisms
+
   - [monera-transformer](http://github.io/Ideabile/monera-transformer) - The first organism, a static trasformer for your ui's.
 
 ## Credits
