@@ -1,4 +1,5 @@
 FSWV = 1.7.0
+INDEX_README = true
 clean: www
 	@rm -rf www/* 2>/dev/null && \
 	docker stop `docker ps -lq` || true && \
@@ -9,7 +10,7 @@ install-dev: .
 	mkdir -p ./dev && cd dev && \
 	curl -L -k https://github.com/emcrisostomo/fswatch/releases/download/${FSWV}/fswatch-${FSWV}.tar.gz | tar zx -C fswatch && \
 	cd fswatch && ./configure && make && make install && cd ../../ && \
-	npm install -g browsersync || sudo npm install -g browsersync || true
+	npm install -g browser-sync || sudo npm install -g browser-sync || true
 
 dev-start: dev-fswatch
 
@@ -33,7 +34,10 @@ update-modules: .gitmodules
 	git push origin $(git rev-parse --abbrev-ref HEAD)
 
 build: docker-compose.yml
-	@mkdir -p ./www && \
+	@mkdir -p ./www && mkdir -p ./content/posts && \
+	if [ ${INDEX_README} ]; then \
+		(rm -rf ./content/posts/index.md && cp README.md ./content/posts/index.md); \
+	fi; \
 	docker-compose build --no-cache static-transformer && \
 	docker-compose run static-transformer build
 
