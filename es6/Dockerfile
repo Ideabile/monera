@@ -17,12 +17,6 @@ ENV BINARGS_TAR="--out-dir /${CONTAINER}/dist"
 ENV CMD_TAR="${BINPATH} /${CONTAINER}/src ${BINARGS_BUFFER} ${BINARGS_TAR}"
 ENV CMD_BUFFER="${BINPATH} ${BINARGS_BUFFER}"
 
-ADD "./$CONTAINER/.babelrc" /.babelrc
-
 ADD "./utils/FileHandler.sh" /FileHandler.sh
 RUN chmod +x /FileHandler.sh
 RUN mkdir /${CONTAINER}/src /${CONTAINER}/dist
-
-ENV BABEL_DISABLE_CACHE=1
-
-ENTRYPOINT /FileHandler.sh

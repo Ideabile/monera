@@ -1,8 +1,11 @@
 COMPILERS = es6 browserify
-SRC?="example_src/"
-DEST?="dist/"
-TARRULE=${SRC}*
 
+BASEPATH?=$(realpath .)/
+SRC ?=$(BASEPATH)src/
+DEST ?=$(BASEPATH)dist/
+
+DEST_JS ?=$(DEST)js/
+SRC_JS ?=$(SRC)js/
 
 ${COMPILERS}:
 		docker build -t monera-${@} -f ./${@}/Dockerfile .
@@ -14,15 +17,23 @@ build-base:
 
 build: build-base build-compilers
 
-test: build-project
+test: test-js-buffer test-js-dir
 
-test-buffer:
+test-js-dir: compile-js
+
+test-js-buffer:
 		echo "class Mauro {}" | docker run -i monera-es6 | docker run -i monera-browserify
 
-build-project:
-		if [ $(DEST -d)  ]; then rm -rf $(DEST)/*; else mkdir $(DEST); fi && \
-		tar c $(TARRULE) | docker run -e "TYPE=tar" -i monera-es6 | docker run -e "TYPE=tar" -i monera-browserify | \
-    tar x -v -C $(DEST) && \
-		echo "Compiled!"
+clean-js:
+		rm -rf $(DEST_JS)*
+
+compile-js:
+		if [ -d $(DEST_JS) ]; then $(MAKE) clean-js; else mkdir -p $(DEST_JS); fi && \
+		cd $(SRC_JS) && \
+		tar c * | \
+		docker run -e "TYPE=tar" -i monera-es6 | \
+		docker run -e "TYPE=tar" -i monera-browserify | \
+	  tar x -v -C "$(DEST_JS)" && \
+		echo "JS Compiled!"
 
 .PHONY: ${COMPILERS}
