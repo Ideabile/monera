@@ -1,0 +1,8 @@
+.DS_store
+npm-debug.log
+content/posts/index.md
+www
+!www/CNAME
+content/assets/js
+content/assets/css
+dist

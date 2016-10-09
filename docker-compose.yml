@@ -1,0 +1,13 @@
+www:
+  image: nginx
+  ports:
+    - "80:80"
+  volumes:
+    - ./www/:/usr/share/nginx/html
+
+static-transformer:
+  image: ideabile/monera-static-transformer
+  volumes:
+    - ./content:/content
+    - ./www:/dest
+  restart: false

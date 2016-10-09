@@ -1,0 +1,24 @@
+sudo: required
+
+branches:
+  only:
+    - master
+
+services:
+  - docker
+
+language: node_js
+
+git:
+    submodules: false
+
+env:
+  global:
+    - CNAME: https://raw.githubusercontent.com/Ideabile/monera/master/CNAME
+    - GH_REF: github.com/Ideabile/monera
+    - secure: "SUd/kis6xcp9a53sTUAI6TebN38RjMgRoW0eNcYz8TCpQbjsd85ft07HZgM/1rnZsg4hE+Jk7yyAHOuLooAbBMk5UiGIqwZ2rSIf6jwlYWkkckEbMQNGbsMJPE5RQYNHwCh3BomlZazJVXvuILwGBLctcJYffZsN45yiDHojHO+G12AvYAg/oK+xyhl8/54GVXhZ8TqxDUDVYQY+DicR7k8SwAfLNqGxtH3c4hrZNMFRvSHvG8Ghm3jz+RhSLh3dT2BLyJpF+1oJh3pPjmRrutHT5T83jOcAYz5fSkyupJXIQ+fExZvAfqX0OUu+wEYqFY8z32Nq6aQvcNJXc6lJpoReDqvl7yZr1fzeb7Oa22zoeWraq2vkaqsgGKxvtJrNgr1ogKvSPqJiXD8V+wFQgRaOmdjtA5GXLzw00r26dRIF/59i7Tp92otdygawQnKBhfBLsL0B7JHzqSLEhMgpbBH1PsoAewnZhRm4QcYRMHRFfsZgDXWPyYGlYs79TXue6fIolvZJ5picGSLV0zzsQRc7ZJ46emvoaMUVpBO/2cHfWJajZacYO6Qw33CBs8BEM0/9dZoE6FddQ/kNDxuEx4/yJPDcDeVHgm++rztpOP9Md2FcMEd0rxjEnyiGbQEF7oNg23UNf1Viv7SiFXSqIJ7Mzhkz2jPM29qbs3bQKlQ="
+
+script: make build
+
+after_success:
+  - if [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then make publish-gh-pages; fi
