@@ -1,4 +1,4 @@
-COMPILERS = es6 browserify
+COMPILERS = es6 browserify metalsmith
 
 BASEPATH?=$(realpath .)/
 SRC ?=$(BASEPATH)src/
@@ -25,15 +25,22 @@ test-js-buffer:
 		echo "class Mauro {}" | docker run -i monera-es6 | docker run -i monera-browserify
 
 clean-js:
-		rm -rf $(DEST_JS)*
+		if [ -d $(DEST_JS) ]; then rm -rf $(DEST_JS)*; else mkdir -p $(DEST_JS); fi
 
 compile-js:
-		if [ -d $(DEST_JS) ]; then $(MAKE) clean-js; else mkdir -p $(DEST_JS); fi && \
+		$(MAKE) clean-js && \
 		cd $(SRC_JS) && \
-		tar c * | \
+		tar c -h * | \
 		docker run -e "TYPE=tar" -i monera-es6 | \
 		docker run -e "TYPE=tar" -i monera-browserify | \
 	  tar x -v -C "$(DEST_JS)" && \
 		echo "JS Compiled!"
+
+compile-content:
+		cd $(SRC) && \
+		tar c -h content/* layouts/* partials/* | docker run -i -e "TYPE=tar" monera-metalsmith | \
+	  tar x -v -C "$(DEST)" && \
+		echo "JS Compiled!"
+
 
 .PHONY: ${COMPILERS}
