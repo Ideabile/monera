@@ -17,6 +17,5 @@ ENV BINARGS_TAR="--out-dir /${CONTAINER}/dist"
 ENV CMD_TAR="${BINPATH} /${CONTAINER}/src ${BINARGS_BUFFER} ${BINARGS_TAR}"
 ENV CMD_BUFFER="${BINPATH} ${BINARGS_BUFFER}"
 
-ADD "./utils/FileHandler.sh" /FileHandler.sh
-RUN chmod +x /FileHandler.sh
 RUN mkdir /${CONTAINER}/src /${CONTAINER}/dist
+RUN mkdir /logs && touch /logs/tar-${COMTAINER}.log
