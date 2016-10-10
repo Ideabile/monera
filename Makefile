@@ -49,6 +49,8 @@ test-js-dir: compile-js
 test-js-buffer:
 		echo "class Mauro {}" | docker run -i monera-es6 | docker run -i monera-browserify
 
+clean: clean-js clean-content clean-sass
+
 clean-js:
 		if [ -d $(DEST_JS) ]; then rm -rf $(DEST_JS)*; else mkdir -p $(DEST_JS); fi
 
@@ -58,7 +60,7 @@ clean-content:
 clean-sass:
 		if [ -d $(DEST_SASS) ]; then rm -rf $(DEST_SASS)*; else mkdir -p $(DEST_SASS); fi
 
-compile: compile-js compile-sass compile-content
+compile: clean compile-js compile-sass compile-content
 
 compile-js:
 		echo "\n\n--- Compiling JS"; \
