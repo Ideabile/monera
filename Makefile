@@ -5,6 +5,8 @@ BASEPATH ?=$(realpath .)/
 SRC ?=$(BASEPATH)src/
 DEST ?=$(BASEPATH)dist/
 
+CONTAINERSPATH ?=$(BASEPATH)containers/
+
 DEST_JS ?=$(DEST)js/
 SRC_JS ?=$(SRC)js/
 
@@ -15,7 +17,7 @@ BEWATCH=./Makefile ./package.json $(COMPILERS) $(SRC)*
 
 ${COMPILERS}:
 		echo "\n\n--- Building container:$(@)"; \
-		docker build -t monera-${@} -f ./${@}/Dockerfile .
+		docker build -t monera-${@} -f ${CONTAINERSPATH}${@}/Dockerfile .
 
 install-dev: .
 		mkdir -p ./_dev && cd _dev && \

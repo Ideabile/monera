@@ -6,12 +6,12 @@ ENV BIN=$PACKAGE
 
 WORKDIR /${BIN}
 
-ADD ${BIN}/package.json /${BIN}/package.json
+ADD ${CONTAINER_PATH}/${BIN}/package.json /${BIN}/package.json
 RUN npm install
 
 RUN mkdir -p /${BIN}/dist /${BIN}/src
 
-ADD ${BIN}/${BIN}.json /${BIN}/${BIN}.json
+ADD ${CONTAINER_PATH}/${BIN}/${BIN}.json /${BIN}/${BIN}.json
 
 RUN mkdir /logs && touch /logs/tar-${COMTAINER}.log
 ENV CMD_TAR="/${BIN}/node_modules/.bin/${BIN}"

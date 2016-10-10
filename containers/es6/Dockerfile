@@ -4,7 +4,7 @@ ENV CONTAINER="es6"
 
 WORKDIR "/${CONTAINER}"
 
-ADD "./$CONTAINER/package.json" "/${CONTAINER}/package.json"
+ADD "${CONTAINER_PATH}/$CONTAINER/package.json" "/${CONTAINER}/package.json"
 RUN npm install
 
 ENV PACKAGE="babel-cli"
