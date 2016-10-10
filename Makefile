@@ -1,4 +1,4 @@
-COMPILERS = base es6 browserify metalsmith sass
+COMPILERS = base es6 browserify uglify metalsmith sass
 
 BASEPATH?=$(realpath .)/
 SRC ?=$(BASEPATH)src/
@@ -41,6 +41,7 @@ compile-js:
 		tar c -h * | \
 		docker run -e "TYPE=tar" -i monera-es6 | \
 		docker run -e "TYPE=tar" -i monera-browserify | \
+		docker run -e "TYPE=tar" -i monera-uglify | \
 	  tar x -v -C "$(DEST_JS)" && \
 		echo "JS Compiled!"
 
