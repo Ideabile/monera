@@ -7,3 +7,4 @@ content/assets/js
 content/assets/css
 dist
 node_modules
+_dev

@@ -1,6 +1,7 @@
 COMPILERS = base es6 browserify uglify metalsmith sass
+FSWV = 1.7.0
 
-BASEPATH?=$(realpath .)/
+BASEPATH ?=$(realpath .)/
 SRC ?=$(BASEPATH)src/
 DEST ?=$(BASEPATH)dist/
 
@@ -10,8 +11,30 @@ SRC_JS ?=$(SRC)js/
 DEST_SASS ?=$(DEST)style/
 SRC_SASS ?=$(SRC)style/
 
+BEWATCH=./Makefile ./package.json $(COMPILERS) $(SRC)*
+
 ${COMPILERS}:
+		echo "\n\n--- Building container:$(@)"; \
 		docker build -t monera-${@} -f ./${@}/Dockerfile .
+
+install-dev: .
+		mkdir -p ./_dev && cd _dev && \
+		curl -L -k https://github.com/emcrisostomo/fswatch/releases/download/${FSWV}/fswatch-${FSWV}.tar.gz | tar zx -C . && \
+		cd fswatch-${FSWV} && ./configure && make && make install
+
+dev:
+		fswatch -Ie "\.#.*" $(BEWATCH) | \
+		(while read file event; do \
+		ext=$${file##*.}; \
+		if [ $${ext} = "scss" ]; then \
+		$(MAKE) compile-sass; \
+		elif [ $${ext} = "js" ]; then \
+		$(MAKE) compile-js; \
+		elif [ $${ext} = "html" ]; then \
+		$(MAKE) compile-content; \
+		else $(MAKE) build && $(MAKE) compile; \
+		fi \
+		done)
 
 build-compilers: ${COMPILERS}
 
@@ -36,6 +59,7 @@ clean-sass:
 compile: compile-js compile-sass compile-content
 
 compile-js:
+		echo "\n\n--- Compiling JS"; \
 		$(MAKE) clean-js && \
 		cd $(SRC_JS) && \
 		tar c -h * | \
@@ -46,6 +70,7 @@ compile-js:
 		echo "JS Compiled!"
 
 compile-sass:
+		echo "\n\n--- Compiling Sass"; \
 		$(MAKE) clean-sass && \
 		cd $(SRC_SASS) && \
 		tar c -h * | \
@@ -54,10 +79,12 @@ compile-sass:
 		echo "SASS Compiled!"
 
 compile-content:
+		echo "\n\n--- Compiling content"; \
 		cd $(SRC) && \
 		tar c -h content/* layouts/* partials/* | docker run -i -e "TYPE=tar" monera-metalsmith | \
 	  tar x -v -C "$(DEST)" && \
 		echo "Content Compiled!"
 
+.SILENT: clean-content clean-js clean-sass dev compile compile-js compile-sass compile-content
 
 .PHONY: ${COMPILERS}
