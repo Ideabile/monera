@@ -71,7 +71,6 @@ compile-js:
 
 compile-sass:
 		echo "\n\n--- Compiling Sass"; \
-		$(MAKE) clean-sass && \
 		cd $(SRC_SASS) && \
 		tar c -h * | \
 		docker run -e "TYPE=tar" -i monera-sass | \
