@@ -13,6 +13,10 @@ SRC_JS ?=$(SRC)js/
 DEST_SASS ?=$(DEST)style/
 SRC_SASS ?=$(SRC)style/
 
+CONTENT_PATH ?=content/
+LAYOUT_PATH ?=layouts/
+PARTIALS_PATH ?=partials/
+
 BEWATCH=./Makefile README.md ./package.json $(COMPILERS) $(SRC)*
 
 ${COMPILERS}:
@@ -92,7 +96,7 @@ compile-sass:
 compile-content:
 		echo "\n\n--- Compiling content"; \
 		cd $(SRC) && \
-		tar c -h content/* layouts/* partials/* | docker run -i -e "TYPE=tar" monera-metalsmith | \
+		tar c -h $(CONTENT_PATH)* $(LAYOUT_PATH)* $(PARTIALS_PATH)* | docker run -i -e "TYPE=tar" monera-metalsmith | \
 	  tar x -v -C "$(DEST)" && \
 		echo "Content Compiled!"
 

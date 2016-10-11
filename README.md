@@ -23,7 +23,7 @@ Even if we reconise a great value on libraries like webpack or gulp, althought t
 
 ---
     
-### How I can use it?
+### What can I do with it?
 If you're starting from zero:
 ```
 mkdir <my-project> && cd <my-project> && git init
@@ -32,7 +32,6 @@ mkdir <my-project> && cd <my-project> && git init
 add it has git submodule:
 ```
 git submodule add https://github.com/Ideabile/monera.git .monera
-
 ```
 
 #### Make a blog
@@ -46,6 +45,8 @@ compile it and profit!
 make -C monera compile "SRC=$(realpath .)/src/" "DEST=$(realpath .)/dist/" && open dist/index.html
 ```
 
+---
+
 #### Compile just javascript
 ```
 make -C monera compile "SRC_JS=$(realpath .)/src/" "DEST_JS=$(realpath .)/dist/"
@@ -58,7 +59,7 @@ make -C monera compile "SRC_SASS=$(realpath .)/src/" "DEST_SASS=$(realpath .)/di
 
 #### Compile static website
 ```
-make -C monera compile "SRC_CONTENT=$(realpath .)/src/" "SRC_LAYOUT=$(realpath .)/src/" "SRC_PARTIALS=$(realpath .)/src/" "DEST_CONTENT=$(realpath .)/dist/"
+make -C monera compile "SRC=$(realpath .)/src/" "CONTENT_PATH=content/" "LAYOUT_PATH=layouts/" "PARTIALS_PATH=partials/" "DEST=$(realpath .)/dist/"
 ```
 
 ---
