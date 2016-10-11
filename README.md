@@ -119,5 +119,4 @@ Organism (or container) are
 ---
 
 ## Credits
-
-  - [![Avatar Mauro](https://avatars.githubusercontent.com/M3kH)](http://www.ideabile.com)
+ - [![Mauro](https://avatars.githubusercontent.com/M3kH?size=100)](http://www.ideabile.com)
