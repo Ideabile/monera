@@ -18,7 +18,6 @@ LAYOUT_PATH ?=layouts/
 PARTIALS_PATH ?=partials/
 
 BEWATCH=./Makefile README.md ./package.json $(COMPILERS) $(SRC)*
-WWW=`realpath --relative-to=$(BASEPATH) $(DEST)`
 
 ${COMPILERS}:
 		echo "\n\n--- Building container:$(@)"; \
@@ -110,10 +109,10 @@ publish: build compile
 		@git branch -D gh-pages 2>/dev/null || true && \
 		git branch -D draft 2>/dev/null || true && \
 		git checkout -b draft && \
-		cp ./CNAME $(WWW)/CNAME && \
-		git add -f $(WWW) && \
+		cp ./CNAME dist/CNAME && \
+		git add -f dist && \
 		git commit -am "Deploy on gh-pages" && \
-		git subtree split --prefix $(WWW) -b gh-pages && \
+		git subtree split --prefix dist -b gh-pages && \
 		git push --force "https://${GH_TOKEN}@${GH_REF}.git" gh-pages:gh-pages > /dev/null 2>&1
 
 .SILENT: clean-content clean-js clean-sass dev compile compile-js compile-sass compile-content
