@@ -1,36 +1,77 @@
----
-layout: default.html
----
 # Monera [![Build Status](https://travis-ci.org/Ideabile/monera.svg?branch=master)](https://travis-ci.org/Ideabile/monera)
 Kingdom that contained unicellular organisms.
 
-Monera try to deliver a set of containers to help developers to create Web Applications.
+Monera is a customisable containerised swissknife for modern web developers tecnology.
 
-Advantages:
-  - Enforce rules and consistencies
-  - You don't have to maintain projects generators (eg. Yeoman)
-  - Dependencies get stash into the container
+Helps you in being more focus on code instead of project scaffolding and setups.
+By helping you in create solid rule that can be used from local development or shipped into your CI or Cloud system.
 
-## Installation
+Because simply it works.
+
+## What is provided?
+Some of the most hipster tools:
+  - super **js** powers: **es6, bundling, minification** with *babeljs, browserify, uglify*
+  - super **css** powers with *node-sass*
+  - **static website** generator with *metalsmith and handlebars*
+  - ... and more to come
+
+## What doesn't provide?
+Currently the approach is to be much purist has possible.
+And feel a bit more clean and robust in the way we choose our libraries.
+
+Even if we reconise a great value on libraries like webpack or gulp, althought this doesn't want to replace them, but is evidet how the need of them come less.
+
+---
+    
+## How to setup
+If you're starting from zero:
 ```
-git clone git@github.com:Ideabile/monera.git && cd monera
+mkdir <my-project> && cd <my-project> && git init
 ```
 
-## Usage
+add it has git submodule:
 ```
-make build
+git submodule add https://github.com/Ideabile/monera.git .monera
 ```
+---
+
+## What can I do with it?
+
+### Make a blog
+copy the source code as an example:
+```
+cp -R .monera/src ./src && rm ./src/content/index.md && echo "# Hello world!" >> ./src/content/index.md
+```
+
+compile it and profit!
+```
+make -C monera compile "SRC=$(realpath .)/src/" "DEST=$(realpath .)/dist/" && open dist/index.html
+```
+
+---
+
+### Compile just javascript
+```
+make -C monera compile "SRC_JS=$(realpath .)/src/" "DEST_JS=$(realpath .)/dist/"
+```
+
+### Compile just sass
+```
+make -C monera compile "SRC_SASS=$(realpath .)/src/" "DEST_SASS=$(realpath .)/dist/"
+```
+
+### Compile static website
+```
+make -C monera compile "SRC=$(realpath .)/src/" "CONTENT_PATH=content/" "LAYOUT_PATH=layouts/" "PARTIALS_PATH=partials/" "DEST=$(realpath .)/dist/"
+```
+
+---
 
 ## Contributing
-This isn't the main project and since this is a Kingdom.
-And the only purpose of this repository is documenting how to develop with our resources.
-
-However you're contributions are also welcome here.
-
 We suggest to take a look to the Organism list bellow that monera is officially compose by.
 Or you can suggest/submit new Organism.
 
-You can still apply your contributions to this repo by:
+Apply your contributions is easy like:
 
   1. Fork it!
   2. Create your feature branch: `git checkout -b my-new-feature`
@@ -38,15 +79,20 @@ You can still apply your contributions to this repo by:
   4. Push to the branch: `git push origin my-new-feature`
   5. Submit a pull request :D
 
+---
+
 ## Development
 We require you to have `npm` and `node` installed to make able to install [`browser-sync`](http://www.browsersync.io/),
 additionally we download and compile [`fsWatch`](http://github.com/emcrisostomo/fswatch) to run `make build` every-time that a file change.
 ```
-make install-dev && make dev-start
+git clone git@github.com:Ideabile/monera.git && cd monera
+```
+```
+make install-dev && make dev
 ```
 Now you can do your changes in the content, and when you save them they would be compile, and your browser refresh automatically.
 
-*Note: We also use ngnix machine to start the server, and our ip address is set to 192.168.99.100 for our local development, you maybe want to change it, if for your case is different in the Makefile, but please don't commit them.*
+---
 
 ## Create your first website with Travis and Github Pages
 This documentation is a live example in how you could change your
@@ -60,10 +106,18 @@ This documentation is a live example in how you could change your
 
 Every change on master would recreate your gh-pages branch. Enjoy :-)
 
-## Other organisms
+---
 
-  - [monera-transformer](https://github.com/Ideabile/monera-static-transformer) - The first organism, a static trasformer for your ui's.
+## Organisms
+Organism (or container) are 
+  - [monera-es6](https://github.com/Ideabile/monera/blob/v2/containers/es6/Dockerfile)
+  - [monera-browserify](https://github.com/Ideabile/monera/blob/v2/containers/browserify/Dockerfile)
+  - [monera-uglify](https://github.com/Ideabile/monera/blob/v2/containers/uglify/Dockerfile)
+  - [monera-sass](https://github.com/Ideabile/monera/blob/v2/containers/sass/Dockerfile)
+  - [monera-metalsmith](https://github.com/Ideabile/monera/blob/v2/containers/metalsmith/Dockerfile)
+
+---
 
 ## Credits
 
-  - [Mauro Mandracchia ~ Author](http://www.ideabile.com)
+  - [![Avatar Mauro](https://avatars.githubusercontent.com/M3kH)](http://www.ideabile.com)

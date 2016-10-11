@@ -1,0 +1,21 @@
+{
+  "source": "/metalsmith/src/content/",
+  "destination": "/metalsmith/dist",
+  "plugins": {
+    "metalsmith-drafts": true,
+    "metalsmith-markdown": true,
+    "metalsmith-collections": {
+      "pattern": "*.md",
+      "sortBy": "date",
+      "reverse": true
+    },
+    "metalsmith-permalinks": "posts/:title",
+    "metalsmith-layouts": {
+      "engine": "handlebars",
+      "default": "default.html",
+      "directory": "src/layouts/",
+      "partials": "src/partials/"
+    },
+    "metalsmith-ignore": true
+  }
+}
