@@ -8,14 +8,14 @@ By helping you in create solid rule that can be used from local development or s
 
 Because simply it works.
 
-### What is provided?
+## What is provided?
 Some of the most hipster tools:
   - super **js** powers: **es6, bundling, minification** with *babeljs, browserify, uglify*
   - super **css** powers with *node-sass*
   - **static website** generator with *metalsmith and handlebars*
   - ... and more to come
 
-### What doesn't provide?
+## What doesn't provide?
 Currently the approach is to be much purist has possible.
 And feel a bit more clean and robust in the way we choose our libraries.
 
@@ -23,7 +23,7 @@ Even if we reconise a great value on libraries like webpack or gulp, althought t
 
 ---
     
-### What can I do with it?
+## How to setup
 If you're starting from zero:
 ```
 mkdir <my-project> && cd <my-project> && git init
@@ -33,8 +33,11 @@ add it has git submodule:
 ```
 git submodule add https://github.com/Ideabile/monera.git .monera
 ```
+---
 
-#### Make a blog
+## What can I do with it?
+
+### Make a blog
 copy the source code as an example:
 ```
 cp -R .monera/src ./src && rm ./src/content/index.md && echo "# Hello world!" >> ./src/content/index.md
@@ -47,17 +50,17 @@ make -C monera compile "SRC=$(realpath .)/src/" "DEST=$(realpath .)/dist/" && op
 
 ---
 
-#### Compile just javascript
+### Compile just javascript
 ```
 make -C monera compile "SRC_JS=$(realpath .)/src/" "DEST_JS=$(realpath .)/dist/"
 ```
 
-#### Compile just sass
+### Compile just sass
 ```
 make -C monera compile "SRC_SASS=$(realpath .)/src/" "DEST_SASS=$(realpath .)/dist/"
 ```
 
-#### Compile static website
+### Compile static website
 ```
 make -C monera compile "SRC=$(realpath .)/src/" "CONTENT_PATH=content/" "LAYOUT_PATH=layouts/" "PARTIALS_PATH=partials/" "DEST=$(realpath .)/dist/"
 ```
@@ -68,7 +71,7 @@ make -C monera compile "SRC=$(realpath .)/src/" "CONTENT_PATH=content/" "LAYOUT_
 We suggest to take a look to the Organism list bellow that monera is officially compose by.
 Or you can suggest/submit new Organism.
 
-You can still apply your contributions to this repo by:
+Apply your contributions is easy like:
 
   1. Fork it!
   2. Create your feature branch: `git checkout -b my-new-feature`
