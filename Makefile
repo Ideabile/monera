@@ -106,7 +106,8 @@ publish-travis:
 		$(MAKE) publish
 
 publish: build compile
-		@git branch -D gh-pages 2>/dev/null || true && \
+		@DIST=$(realpath --relative-to=${BASEPATH} ${DEST}) \
+		git branch -D gh-pages 2>/dev/null || true && \
 		git branch -D draft 2>/dev/null || true && \
 		git checkout -b draft && \
 		cp ./CNAME $(DEST)CNAME && \
