@@ -110,10 +110,10 @@ publish: build compile
 		git branch -D gh-pages 2>/dev/null || true && \
 		git branch -D draft 2>/dev/null || true && \
 		git checkout -b draft && \
-		cp ./CNAME $(DEST)CNAME && \
-		git add -f $(DEST) && \
+		cp ./CNAME $(DIST)CNAME && \
+		git add -f $(DIST) && \
 		git commit -am "Deploy on gh-pages" && \
-		git subtree split --prefix $(DEST) -b gh-pages && \
+		git subtree split --prefix $(DIST) -b gh-pages && \
 		git push --force "https://${GH_TOKEN}@${GH_REF}.git" gh-pages:gh-pages > /dev/null 2>&1
 
 .SILENT: clean-content clean-js clean-sass dev compile compile-js compile-sass compile-content
