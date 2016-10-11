@@ -18,7 +18,7 @@ LAYOUT_PATH ?=layouts/
 PARTIALS_PATH ?=partials/
 
 BEWATCH=./Makefile README.md ./package.json $(COMPILERS) $(SRC)*
-WWW=`realpath --relative-to=${BASEPATH} ${DEST}`
+WWW=`realpath --relative-to=$(BASEPATH) $(DEST)`
 
 ${COMPILERS}:
 		echo "\n\n--- Building container:$(@)"; \
