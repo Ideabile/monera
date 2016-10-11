@@ -109,7 +109,7 @@ publish: build compile
 		@git branch -D gh-pages 2>/dev/null || true && \
 		git branch -D draft 2>/dev/null || true && \
 		git checkout -b draft && \
-		cp CNAME $(DEST) CNAME && \
+		cp ./CNAME $(DEST)CNAME && \
 		git add -f $(DEST) && \
 		git commit -am "Deploy on gh-pages" && \
 		git subtree split --prefix $(DEST) -b gh-pages && \
