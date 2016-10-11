@@ -13,7 +13,7 @@ SRC_JS ?=$(SRC)js/
 DEST_SASS ?=$(DEST)style/
 SRC_SASS ?=$(SRC)style/
 
-BEWATCH=./Makefile ./package.json $(COMPILERS) $(SRC)*
+BEWATCH=./Makefile README.md ./package.json $(COMPILERS) $(SRC)*
 
 ${COMPILERS}:
 		echo "\n\n--- Building container:$(@)"; \
@@ -25,6 +25,7 @@ install-dev: .
 		cd fswatch-${FSWV} && ./configure && make && make install
 
 dev:
+		$(MAKE) browser-sync-start & \
 		fswatch -Ie "\.#.*" $(BEWATCH) | \
 		(while read file event; do \
 		ext=$${file##*.}; \
@@ -34,9 +35,16 @@ dev:
 		$(MAKE) compile-js; \
 		elif [ $${ext} = "html" ]; then \
 		$(MAKE) compile-content; \
+		elif [ $${ext} = "md" ]; then \
+		$(MAKE) compile-content; \
 		else $(MAKE) build && $(MAKE) compile; \
 		fi \
 		done)
+
+browser-sync-start:
+		@if [ ! -z `which browser-sync` ]; \
+		then browser-sync start -s $(DEST) -f $(DEST) 1> /dev/null;\
+		else echo "We recommend to install browser-sync"; fi
 
 build-compilers: ${COMPILERS}
 
