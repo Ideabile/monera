@@ -8,7 +8,7 @@ DEST ?=$(BASEPATH)dist/
 CONTAINERSPATH ?=$(BASEPATH)containers/
 
 DEST_JS ?=$(DEST)js/
-SRC_JS ?=$(SRC)js/
+SRC_JS ?=$(SRC)/website/js/
 
 DEST_SASS ?=$(DEST)style/
 SRC_SASS ?=$(SRC)style/
@@ -18,6 +18,8 @@ LAYOUT_PATH ?=layouts/
 PARTIALS_PATH ?=partials/
 
 BEWATCH=./Makefile README.md ./package.json $(COMPILERS) $(SRC)*
+
+PACKAGE_NAME=$(shell cat "$(BASEPATH)package.json" | grep name | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr ':' '\n' | tail -1 | tr -d '[[:space:]]')
 
 ${COMPILERS}:
 		echo "\n\n--- Building container:$(@)"; \
@@ -52,6 +54,12 @@ browser-sync-start:
 
 build-compilers: ${COMPILERS}
 
+build-b:
+		echo $(PACKAGE_NAME)
+
+build-base:
+		docker build -t ${PACKAGE_NAME}-modules -f ${CONTAINERSPATH}modules/Dockerfile .
+
 build: build-compilers
 
 test: test-js-buffer test-js-dir
@@ -85,6 +93,18 @@ compile-js:
 	  tar x -v -C "$(DEST_JS)" && \
 		echo "JS Compiled!"
 
+start-shared-volumes:
+		@$(eval MODULES:=$(shell docker run -d -t $(PACKAGE_NAME)-modules tail -f /dev/null))
+
+compile-cli: start-shared-volumes
+		cd src/cli && \
+		tar c -h * | \
+		docker run -e "TYPE=tar" -i monera-es6 | \
+		docker run -e "TYPE=tar" --volumes-from $(MODULES) -i monera-browserify --node | \
+	  tar x -v -C "$(DEST_JS)cli/" && \
+		docker kill $(MODULES)
+		echo "JS Compiled!"
+
 compile-sass:
 		echo "\n\n--- Compiling Sass"; \
 		cd $(SRC_SASS) && \
@@ -105,7 +125,7 @@ publish-travis:
 		git config user.email "info@ideabile.com" && \
 		$(MAKE) publish
 
-publish: build compile
+publish: build compile ## Publish
 		@git branch -D gh-pages 2>/dev/null || true && \
 		git branch -D draft 2>/dev/null || true && \
 		git checkout -b draft && \
@@ -117,4 +137,9 @@ publish: build compile
 
 .SILENT: clean-content clean-js clean-sass dev compile compile-js compile-sass compile-content
 
+help:
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+
 .PHONY: ${COMPILERS}
+.DEFAULT_GOAL := help
