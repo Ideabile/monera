@@ -1,12 +1,14 @@
-FROM node
+FROM mhart/alpine-node:latest
 
-VOLUME ["/logs", "]
+VOLUME ["/logs"]
 
 ENV TYPE="buffer"
 ENV CONTAINER_PATH="./containers"
-ENV PROJECT_PATH="."
 
-ADD "${CONTAINER_PATH}/_utils/FileHandler.sh" /FileHandler.sh
-RUN chmod +x /FileHandler.sh
+ADD ${CONTAINER_PATH}/base/EntryPoint.sh /EntryPoint.sh
+RUN chmod +x /EntryPoint.sh
+RUN mkdir -p /monera/src /monera/dist
 
-ENTRYPOINT /FileHandler.sh
+WORKDIR /monera
+
+ENTRYPOINT /EntryPoint.sh

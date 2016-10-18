@@ -1,11 +1,20 @@
 FROM monera-base
 
+RUN apk add --update \
+    python \
+    python-dev \
+    py-pip \
+    build-base \
+  && pip install virtualenv \
+  && rm -rf /var/cache/apk/*
+
 ENV CONTAINER="sass"
 ENV PACKAGE="node-sass"
 ENV BIN=$PACKAGE
 
+RUN npm install mkdirp
 RUN npm install $PACKAGE
 
-RUN mkdir /logs && touch /logs/tar-sass.log
-ENV CMD_TAR="./node_modules/.bin/${BIN} --include-path /node_modules/ /src/index.scss /dist/index.css" 
-ENV CMD_BUFFER="./node_modules/.bin/${BIN}"
+RUN touch /logs/tar-sass.log
+ENV CMD_TAR="/monera/node_modules/.bin/${BIN} --include-path /monera/src/node_modules/ /monera/src/index.scss /monera/dist/index.css" 
+ENV CMD_BUFFER="/monera/node_modules/.bin/${BIN}"

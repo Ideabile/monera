@@ -1,6 +1,6 @@
 {
-  "source": "/metalsmith/src/content/",
-  "destination": "/metalsmith/dist",
+  "source": "/monera/src/content/",
+  "destination": "/monera/dist",
   "plugins": {
     "metalsmith-drafts": true,
     "metalsmith-markdown": true,

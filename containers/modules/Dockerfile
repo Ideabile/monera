@@ -1,10 +1,11 @@
 FROM node:latest
 
-VOLUME ["/src/node_modules"]
 
 ENV PROJECT_PATH="."
+WORKDIR /monera
 
-ADD "${PROJECT_PATH}/package.json" /src/package.json
-WORKDIR /src
+ADD "${PROJECT_PATH}/package.json" /monera/package.json
 
 RUN npm install
+
+VOLUME ["/monera/node_modules"]

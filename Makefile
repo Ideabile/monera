@@ -54,13 +54,10 @@ browser-sync-start:
 
 build-compilers: ${COMPILERS}
 
-build-b:
-		echo $(PACKAGE_NAME)
-
-build-base:
+modules:
 		docker build -t ${PACKAGE_NAME}-modules -f ${CONTAINERSPATH}modules/Dockerfile .
 
-build: build-compilers
+build: build-compilers modules
 
 test: test-js-buffer test-js-dir
 
