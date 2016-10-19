@@ -1,3 +1,5 @@
+#!/usr/bin/make -f
+
 COMPILERS = base es6 browserify uglify metalsmith sass
 FSWV = 1.7.0
 
@@ -8,7 +10,7 @@ DEST ?=$(BASEPATH)dist/
 CONTAINERSPATH ?=$(BASEPATH)containers/
 
 DEST_JS ?=$(DEST)js/
-SRC_JS ?=$(SRC)/website/js/
+SRC_JS ?=$(SRC)/js/
 
 DEST_SASS ?=$(DEST)style/
 SRC_SASS ?=$(SRC)style/
@@ -21,9 +23,24 @@ BEWATCH=./Makefile README.md ./package.json $(COMPILERS) $(SRC)*
 
 PACKAGE_NAME=$(shell cat "$(BASEPATH)package.json" | grep name | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr ':' '\n' | tail -1 | tr -d '[[:space:]]')
 
-${COMPILERS}:
+# START --- Build Containers
+
+${COMPILERS}: ## Build container
 		echo "\n\n--- Building container:$(@)"; \
 		docker build -t monera-${@} -f ${CONTAINERSPATH}${@}/Dockerfile .
+
+build-compilers: ${COMPILERS} ## Build all the compilers
+
+build: build-compilers modules
+
+modules: ## Build the Package.json in a specific container
+		docker build -t ${PACKAGE_NAME}-modules -f ${CONTAINERSPATH}modules/Dockerfile .
+
+# END
+
+
+
+# START --- Dev Resources
 
 install-dev: .
 		mkdir -p ./_dev && cd _dev && \
@@ -52,19 +69,24 @@ browser-sync-start:
 		then browser-sync start -s $(DEST) -f $(DEST) 1> /dev/null;\
 		else echo "We recommend to install browser-sync"; fi
 
-build-compilers: ${COMPILERS}
+# END
 
-modules:
-		docker build -t ${PACKAGE_NAME}-modules -f ${CONTAINERSPATH}modules/Dockerfile .
 
-build: build-compilers modules
 
-test: test-js-buffer test-js-dir
+# START --- Tests
 
-test-js-dir: compile-js
+test: test-js-buffer test-js-dir ## Test the compilers
 
-test-js-buffer:
-		echo "class Mauro {}" | docker run -i monera-es6 | docker run -i monera-browserify
+test-js-dir: compile-js ## Test to compile dir
+
+test-js-buffer: ## Test compiler just with buffers
+		echo "class Test {}" | docker run -i monera-es6 | docker run -i monera-browserify
+
+# END
+
+
+
+# START --- Clean tasks
 
 clean: clean-js clean-content clean-sass
 
@@ -77,7 +99,19 @@ clean-content:
 clean-sass:
 		if [ -d $(DEST_SASS) ]; then rm -rf $(DEST_SASS)*; else mkdir -p $(DEST_SASS); fi
 
-compile: clean compile-js compile-sass compile-content
+# END
+
+
+
+# START --- Compiling utils
+
+compile: clean compile-js compile-sass compile-content ## Compile the website
+
+start-shared-volumes:
+		@$(eval MODULES:=$(shell docker run -d -t $(PACKAGE_NAME)-modules tail -f /dev/null))
+
+run-${CONTAINERS}:
+		docker run -i monera-${@}
 
 compile-js:
 		echo "\n\n--- Compiling JS"; \
@@ -89,9 +123,6 @@ compile-js:
 		docker run -e "TYPE=tar" -i monera-uglify | \
 	  tar x -v -C "$(DEST_JS)" && \
 		echo "JS Compiled!"
-
-start-shared-volumes:
-		@$(eval MODULES:=$(shell docker run -d -t $(PACKAGE_NAME)-modules tail -f /dev/null))
 
 compile-cli: start-shared-volumes
 		cd src/cli && \
@@ -117,6 +148,12 @@ compile-content:
 	  tar x -v -C "$(DEST)" && \
 		echo "Content Compiled!"
 
+# END
+
+
+
+# START --- Publish
+
 publish-travis:
 		@git config user.name "Travis CI" && \
 		git config user.email "info@ideabile.com" && \
@@ -132,11 +169,22 @@ publish: build compile ## Publish
 		git subtree split --prefix dist -b gh-pages && \
 		git push --force "https://${GH_TOKEN}@${GH_REF}.git" gh-pages:gh-pages > /dev/null 2>&1
 
+# END
+
 .SILENT: clean-content clean-js clean-sass dev compile compile-js compile-sass compile-content
 
-help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+# START -- Utils
+bar := "\n--------------------------------------------------------\n"
+title :="\n             M O N E R A   K I N G D O M"
+subtitle :="      containerised web development ready to use"
+more := " for more info visit: http://github.com/ideabile/monera"
 
+help:
+	@echo ${title}${bar}${subtitle}"\n"${more}${bar} && \
+	grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' && \
+	echo ${bar}
+
+# END
 
 .PHONY: ${COMPILERS}
 .DEFAULT_GOAL := help
