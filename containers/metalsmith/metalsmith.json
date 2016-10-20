@@ -13,8 +13,8 @@
     "metalsmith-layouts": {
       "engine": "handlebars",
       "default": "default.html",
-      "directory": "src/layouts/",
-      "partials": "src/partials/"
+      "directory": "layouts/",
+      "partials": "partials/"
     },
     "metalsmith-ignore": true
   }

@@ -16,5 +16,5 @@ RUN npm install mkdirp
 RUN npm install $PACKAGE
 
 RUN touch /logs/tar-sass.log
-ENV CMD_TAR="/monera/node_modules/.bin/${BIN} --include-path /monera/src/node_modules/ /monera/src/index.scss /monera/dist/index.css" 
+ENV CMD_TAR="/monera/node_modules/.bin/${BIN} --include-path /node_modules/ /monera/src/index.scss /monera/dist/index.css" 
 ENV CMD_BUFFER="/monera/node_modules/.bin/${BIN}"

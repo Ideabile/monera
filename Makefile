@@ -4,10 +4,11 @@ COMPILERS = base es6 browserify uglify metalsmith sass
 FSWV = 1.7.0
 
 BASEPATH ?=$(realpath .)/
+
 SRC ?=$(BASEPATH)src/
 DEST ?=$(BASEPATH)dist/
 
-CONTAINERSPATH ?=$(BASEPATH)containers/
+CONTAINERSPATH ?=$(realpath .)/containers/
 
 DEST_JS ?=$(DEST)js/
 SRC_JS ?=$(SRC)js/
@@ -19,12 +20,16 @@ CONTENT_PATH ?=content/
 LAYOUT_PATH ?=layouts/
 PARTIALS_PATH ?=partials/
 
-PACKAGE_NAME=$(shell cat "$(BASEPATH)package.json" | grep name | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr ':' '\n' | tail -1 | tr -d '[[:space:]]')
+PACKAGE_NAME =$(shell cat "$(BASEPATH)package.json" | grep name | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr ':' '\n' | tail -1 | tr -d '[[:space:]]')
+
+PACKAGE_MAIN =$(shell cat "$(BASEPATH)package.json" | grep main | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr ':' '\n' | tail -1 | tr -d '[[:space:]]')
+
+$(echo $(PACKAGE_MAIN))
 
 # START --- Build Containers
 
 ${COMPILERS}: ## Build container
-		echo "\n\n--- Building container:$(@)"; \
+		@echo "\n\n--- Building container:$(@)"; \
 		docker build -t monera-${@} -f ${CONTAINERSPATH}${@}/Dockerfile .
 
 build-compilers: ${COMPILERS} ## Build all the compilers
@@ -32,7 +37,7 @@ build-compilers: ${COMPILERS} ## Build all the compilers
 build: build-compilers modules
 
 modules: ## Build the Package.json in a specific container
-		docker build -t ${PACKAGE_NAME}-modules -f ${CONTAINERSPATH}modules/Dockerfile .
+		@docker build -t ${PACKAGE_NAME}-modules -f ${CONTAINERSPATH}modules/Dockerfile .
 
 # END
 
@@ -40,19 +45,19 @@ modules: ## Build the Package.json in a specific container
 
 # START --- Dev Resources
 
-install-dev: .
-		mkdir -p ./_dev && cd _dev && \
+dev-install: ## Install Dependencies for running dev mode
+		@mkdir -p ./_dev && cd _dev && \
 		curl -L -k https://github.com/emcrisostomo/fswatch/releases/download/${FSWV}/fswatch-${FSWV}.tar.gz | tar zx -C . && \
 		cd fswatch-${FSWV} && ./configure && make && make install
 
 
 BEWATCH:=./Makefile README.md ./package.json $(COMPILERS) $(SRC)*
-dev:
-		$(MAKE) browser-sync-start & \
+dev: ## Dev mode watch changes and run compilers
+		@$(MAKE) browser-sync-start & \
 		fswatch -Ie "\.#.*" $(BEWATCH) | \
 		$(call WATCHER)
 
-browser-sync-start:
+browser-sync-start: ## Runs browser-sync
 		@if [ ! -z `which browser-sync` ]; \
 		then browser-sync start -s $(DEST) -f $(DEST) 1> /dev/null;\
 		else echo "We recommend to install browser-sync"; fi
@@ -82,7 +87,7 @@ test: test-js-buffer test-js-dir ## Test the compilers
 test-js-dir: compile-js ## Test to compile dir
 
 test-js-buffer: ## Test compiler just with buffers
-		echo "class Test {}" | docker run -i monera-es6 | docker run -i monera-browserify
+		@echo "class Test {}" | docker run -i monera-es6 | docker run -i monera-browserify
 
 # END
 
@@ -90,16 +95,16 @@ test-js-buffer: ## Test compiler just with buffers
 
 # START --- Clean tasks
 
-clean: clean-js clean-content clean-sass
+clean: clean-js clean-content clean-sass ## Clean all the project
 
-clean-js:
-		if [ -d $(DEST_JS) ]; then rm -rf $(DEST_JS)*; else mkdir -p $(DEST_JS); fi
+clean-js: ## Clean the js destination
+		@if [ -d $(DEST_JS) ]; then rm -rf $(DEST_JS)*; else mkdir -p $(DEST_JS); fi
 
-clean-content:
-		rm -rf $(DEST)/*.html
+clean-content: ## Clean the content
+		@rm -rf $(DEST)/*.html
 
-clean-sass:
-		if [ -d $(DEST_SASS) ]; then rm -rf $(DEST_SASS)*; else mkdir -p $(DEST_SASS); fi
+clean-sass: ## Clean the sass destination
+		@if [ -d $(DEST_SASS) ]; then rm -rf $(DEST_SASS)*; else mkdir -p $(DEST_SASS); fi
 
 # END
 
@@ -108,7 +113,7 @@ clean-sass:
 # START --- Compiling utils
 run := docker run -e "TYPE=tar" -i monera-${1}
 
-start-shared-volumes:
+start-shared-volumes: ## Start shared volume for package.json
 		@$(eval MODULES:=$(shell docker run -d -t $(PACKAGE_NAME)-modules tail -f /dev/null))
 
 define RUN
@@ -126,26 +131,26 @@ define COMPILE_START
 endef
 
 define COMPILE_END
-		tar x -v -C "$(DEST)"
-		if[[ -n $(MODULES) ]]; then docker kill $(MODULES); fi
+		tar x -v -C "$(DEST)" && \
+		if [ ! -z "${MODULES}" ] ; then docker kill $(MODULES) ; fi && \
 		echo "--- Compiled!\n"
 endef
 
 compile: clean compile-js compile-sass compile-content ## Compile the website
 
-compile-js: start-shared-volumes
+compile-js: start-shared-volumes ## Compile the js
 		@$(call COMPILE_START,js,$(SRC_JS),*) | \
 		$(call RUN,es6) | $(call RUNPKG,browserify) | $(call RUN,uglify) | \
 		$(call COMPILE_END,js)
 
-compile-sass:
+compile-sass: start-shared-volumes ## Compile sass
 		@$(call COMPILE_START,sass,$(SRC_SASS),*) | \
-		$(call RUN,sass) | \
+		$(call RUNPKG,sass) | \
 		$(call COMPILE_END,sass)
 
-compile-content:
-		@$(call COMPILE_START,content,$(SRC),"$(CONTENT_PATH)* $(LAYOUT_PATH)* $(PARTIALS_PATH)*") | \
-		$(call RUN,sass) | \
+compile-content: ## Compile content
+		@$(call COMPILE_START,content,$(SRC),$(CONTENT_PATH)* $(LAYOUT_PATH)* $(PARTIALS_PATH)*) | \
+		$(call RUN,metalsmith) | \
 		$(call COMPILE_END,content)
 
 # END
@@ -154,7 +159,7 @@ compile-content:
 
 # START --- Publish
 
-publish-travis:
+publish-travis: ## Publish with travis
 		@git config user.name "Travis CI" && \
 		git config user.email "info@ideabile.com" && \
 		$(MAKE) publish
