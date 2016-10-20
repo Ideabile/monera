@@ -6,7 +6,6 @@ let paper = new _paper.PaperScope(window);
 var canvas = document.getElementById('bg');
 paper.setup(canvas);
 
-with(paper){
 function Ball(r, p, v) {
 	this.radius = r;
 	this.point = p;
@@ -140,5 +139,4 @@ function onFrame() {
 	for (var i = 0, l = balls.length; i < l; i++) {
 		balls[i].iterate();
 	}
-}
 }
