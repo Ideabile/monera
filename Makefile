@@ -69,7 +69,7 @@ while read file event; do \
 		$(MAKE) compile-sass; \
 		elif [ $${ext} = "js" ]; then \
 		$(MAKE) compile-js; \
-		elif [ $${ext} = "html" || $${ext} = "md" ]; then \
+		elif [[ $${ext} = "html" || $${ext} = "md" ]]; then \
 		$(MAKE) compile-content; \
 		else $(MAKE) build && $(MAKE) compile; \
 		fi \
@@ -87,7 +87,7 @@ test: test-js-buffer test-js-dir ## Test the compilers
 test-js-dir: compile-js ## Test to compile dir
 
 test-js-buffer: ## Test compiler just with buffers
-		@echo "class Test {}" | docker run -i monera-es6 | docker run -i monera-browserify
+		@echo "class Test {}" | docker run -i -e "TYPE=buffer" monera-es6 | docker run -i -e "TYPE=buffer" monera-browserify
 
 # END
 
