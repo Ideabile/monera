@@ -3,12 +3,12 @@
 COMPILERS = base es6 browserify uglify metalsmith sass
 FSWV = 1.7.0
 
-BASEPATH ?=$(realpath .)/
+BASEPATH ?=$(realpath $PWD)/
 
 SRC ?=$(BASEPATH)src/
 DEST ?=$(BASEPATH)dist/
 
-CONTAINERSPATH ?=$(realpath .)/containers/
+CONTAINERSPATH ?=$(dirname $0)/containers/
 
 DEST_JS ?=$(DEST)js/
 SRC_JS ?=$(SRC)js/
