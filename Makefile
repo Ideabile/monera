@@ -8,7 +8,7 @@ BASEPATH ?=$(realpath $(PWD))/
 SRC ?=$(BASEPATH)src/
 DEST ?=$(BASEPATH)dist/
 
-CONTAINERSPATH ?=$(dirname $(0))/containers/
+CONTAINERSPATH ?=$(dirname "$0")/containers/
 
 DEST_JS ?=$(DEST)js/
 SRC_JS ?=$(SRC)js/
