@@ -45,24 +45,24 @@ cp -R .monera/src ./src && rm ./src/content/index.md && echo "# Hello world!" >>
 
 compile it and profit!
 ```
-make -C monera compile "SRC=$(realpath .)/src/" "DEST=$(realpath .)/dist/" && open dist/index.html
+./.monera/monera compile && open dist/index.html
 ```
 
 ---
 
 ### Compile just javascript
 ```
-make -C monera compile "SRC_JS=$(realpath .)/src/" "DEST_JS=$(realpath .)/dist/"
+./.monera/monera compile-js
 ```
 
 ### Compile just sass
 ```
-make -C monera compile "SRC_SASS=$(realpath .)/src/" "DEST_SASS=$(realpath .)/dist/"
+./.monera/monera compile-sass
 ```
 
 ### Compile static website
 ```
-make -C monera compile "SRC=$(realpath .)/src/" "CONTENT_PATH=content/" "LAYOUT_PATH=layouts/" "PARTIALS_PATH=partials/" "DEST=$(realpath .)/dist/"
+./.monera/monera compile-content
 ```
 
 ---

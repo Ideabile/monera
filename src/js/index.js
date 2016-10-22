@@ -1,9 +1,4 @@
-let something = require("./something.js");
-let _ = require('underscore');
+import BG from './background'
+import commands from './make-commands'
 
-
-console.log(test);
-
-class Mauro{
-  
-}
+new BG()

@@ -18,6 +18,12 @@
   "homepage": "https://github.com/Ideabile/monera#readme",
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
+    "createjs-easeljs": "^0.8.2",
     "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "commander": "^2.9.0",
+    "inquirer": "^1.2.2",
+    "try-thread-sleep": "^1.0.0"
   }
 }

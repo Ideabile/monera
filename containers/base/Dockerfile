@@ -1,15 +1,14 @@
-FROM node:latest
+FROM mhart/alpine-node:latest
 
-VOLUME ["/logs", "]
+VOLUME ["/logs"]
 
-ENV TYPE="buffer"
+ENV TYPE="tar"
 ENV CONTAINER_PATH="./containers"
-ENV PROJECT_PATH="."
 
-ADD "${CONTAINER_PATH}/_utils/FileHandler.sh" /FileHandler.sh
-RUN chmod +x /FileHandler.sh
+ADD ${CONTAINER_PATH}/base/EntryPoint.sh /EntryPoint.sh
+RUN chmod +x /EntryPoint.sh
+RUN mkdir -p /monera/src /monera/dist
 
-ADD "${PROJECT_PATH}/package.json" /package.json
-RUN npm install
+WORKDIR /monera
 
-ENTRYPOINT /FileHandler.sh
+ENTRYPOINT /EntryPoint.sh

@@ -4,11 +4,11 @@ ENV CONTAINER="browserify"
 ENV PACKAGE="browserify"
 ENV BIN=$PACKAGE
 
-RUN npm install $PACKAGE
+WORKDIR /
+RUN npm install -g $PACKAGE
 
-RUN mkdir -p /${CONTAINER}/dist /${CONTAINER}/src
+ENV CMD_TAR="${BIN} /monera/src/index.js -o /monera/dist/index.js"
+ENV CMD_BUFFER="${BIN} -"
+RUN touch /logs/tar-${COMTAINER}.log
 
-ENV CMD_TAR="./node_modules/.bin/${BIN} /${CONTAINER}/src/index.js -o /${CONTAINER}/dist/index.js"
-ENV CMD_BUFFER="./node_modules/.bin/${BIN} -"
-
-RUN mkdir /logs && touch /logs/tar-${COMTAINER}.log
+WORKDIR /monera
