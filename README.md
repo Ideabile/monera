@@ -8,7 +8,7 @@ By helping you in create solid rule that can be used from local development or s
 
 Because simply it works.
 
-<script type="text/javascript" src="https://asciinema.org/a/bzuj6ef4b3qqbp0lf1ti0mflj.js" id="asciicast-bzuj6ef4b3qqbp0lf1ti0mflj" data-autoplay="true async></script>
+<script type="text/javascript" src="https://asciinema.org/a/bzuj6ef4b3qqbp0lf1ti0mflj.js" id="asciicast-bzuj6ef4b3qqbp0lf1ti0mflj" data-autoplay="true" async></script>
 
 ## What is provided?
 Some of the most hipster tools:
