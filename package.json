@@ -18,7 +18,7 @@
   "homepage": "https://github.com/Ideabile/monera#readme",
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
-    "paper": "^0.10.2",
+    "createjs-easeljs": "^0.8.2",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

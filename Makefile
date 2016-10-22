@@ -8,7 +8,7 @@ BASEPATH ?=$(realpath $(PWD))/
 SRC ?=$(BASEPATH)src/
 DEST ?=$(BASEPATH)dist/
 
-CONTAINERSPATH ?=$(dirname "$0")/containers/
+CONTAINERSPATH ?=$(realpath .)/containers/
 
 DEST_JS ?=$(DEST)js/
 SRC_JS ?=$(SRC)js/
@@ -76,6 +76,28 @@ while read file event; do \
 		done
 endef
 
+get-nat-ip:
+		@$(eval IP:=$(shell ifconfig | grep '\<inet\>' | cut -d ' ' -f2 | grep -v '127.0.0.1' | grep -v '10.250.250.1'))
+
+install-socat:
+		@if [ ! -z "$(shell which socat)" ]; \
+		then browser-sync start -s $(DEST) -f $(DEST) 1> /dev/null;\
+		else echo "We recommend to install socat"; fi
+
+start-socat: start-x
+		@if [ ! -z "$(shell which socat)" ]; \
+		then socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$(DISPLAY)\" &\
+		else echo "You need socat to start the app"; fi
+
+start-x: /Applications/Utilities/XQuartz.app/Contents/MacOS/X11
+		@exec /Applications/Utilities/XQuartz.app/Contents/MacOS/X11 1> /dev/null &
+
+stop-socat:
+		@killall socat
+
+atom: start-socat get-nat-ip
+		@docker run -e "DISPLAY=$(IP):0" -v "$(BASEPATH):/src" jamesnetherton/docker-atom-editor /usr/bin/atom -f /src; killall socat
+
 # END
 
 
@@ -113,15 +135,36 @@ clean-sass: ## Clean the sass destination
 # START --- Compiling utils
 run := docker run -e "TYPE=tar" -i monera-${1}
 
-start-shared-volumes: ## Start shared volume for package.json
-		@$(eval MODULES:=$(shell docker run -d -t $(PACKAGE_NAME)-modules tail -f /dev/null))
+MODULE_CONTAINER := $(PACKAGE_NAME)-modules
+
+define GETMODULEID
+docker ps -a -q --filter name=$(MODULE_CONTAINER)
+endef
+
+export GETMODULEID
+
+clean-running: ## Clean running containers
+		@docker kill $(shell docker ps -q) && docker rm $(shell docker ps -a -q)
+
+start-modules: ## Start shared volume for package.json
+		@$(eval CONTAINER_ID=$(shell $(call GETMODULEID))) \
+		$(shell if [ -z "$(CONTAINER_ID)" ]; then \
+			docker run -d -t --name "$(MODULE_CONTAINER)" $(MODULE_CONTAINER) tail -f /dev/null > /dev/null 2>&1 ; \
+		fi)
+
+stop-modules: ## Stop shared volumes for package.json
+		@$(eval CONTAINER_ID=$(shell $(call GETMODULEID))) \
+		echo $(CONTAINER_ID) \
+		$(shell if [[ ! -z $(CONTAINER_ID) ]]; then \
+				docker kill $(CONTAINER_ID) && docker rm $(CONTAINER_ID) > /dev/null 2>&1 ; \
+		fi)
 
 define RUN
-		docker run -e "TYPE=tar" -i monera-$1
+		docker run -e "TYPE=tar" --rm -i monera-$1
 endef
 
 define RUNPKG
-		docker run -e "TYPE=tar" -i --volumes-from $(MODULES) monera-$1
+		docker run -e "TYPE=tar" --rm -i --volumes-from $(shell $(call GETMODULEID)) monera-$1
 endef
 
 define COMPILE_START
@@ -132,23 +175,22 @@ endef
 
 define COMPILE_END
 		tar x -v -C "$(DEST)" && \
-		if [ ! -z "${MODULES}" ] ; then docker kill $(MODULES) ; fi && \
 		echo "--- Compiled!\n"
 endef
 
-compile: clean compile-js compile-sass compile-content ## Compile the website
+compile: clean start-modules compile-js compile-sass compile-content stop-modules ## Compile the website
 
-compile-js: start-shared-volumes ## Compile the js
+compile-js: start-modules ## Compile the js
 		@$(call COMPILE_START,js,$(SRC_JS),*) | \
 		$(call RUN,es6) | $(call RUNPKG,browserify) | $(call RUN,uglify) | \
 		$(call COMPILE_END,js)
 
-compile-sass: start-shared-volumes ## Compile sass
+compile-sass: start-modules ## Compile sass
 		@$(call COMPILE_START,sass,$(SRC_SASS),*) | \
 		$(call RUNPKG,sass) | \
 		$(call COMPILE_END,sass)
 
-compile-content: ## Compile content
+compile-content: start-modules ## Compile content
 		@$(call COMPILE_START,content,$(SRC),$(CONTENT_PATH)* $(LAYOUT_PATH)* $(PARTIALS_PATH)*) | \
 		$(call RUN,metalsmith) | \
 		$(call COMPILE_END,content)
@@ -189,6 +231,10 @@ help: ## This help
 	grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' && \
 	echo ${bar}
 
+_get-task:
+	@echo "[\n" && \
+grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "{\"name\": \"%s\", \"desc\": \"%s\" },\n", $$1, $$2}' && \
+	echo "\n]"
 # END
 
 .PHONY: ${COMPILERS}
