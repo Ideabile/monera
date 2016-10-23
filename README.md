@@ -136,6 +136,7 @@ With a model like this we're able to chain the containers and pass our code from
 
 ## Why?
 ![Why?](http://i.giphy.com/bw5OY9zTKlOHS.gif)
+
 The web is constantly saturated with new tools that pops up to keep your development much fancier than it was before. Shaming on all you've done until now.
 
 ... said by the new *'cool tool'*...
