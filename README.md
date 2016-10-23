@@ -26,7 +26,7 @@ Some of the most hipster tools:
 Currently the approach is to be much purist has possible.
 And feel a bit more clean and robust in the way we choose our libraries.
 
-Even if we reconise a great value on libraries like webpack or gulp, althought this doesn't want to replace them, but is evidet how the need of them come less.
+Even if we recognize a great value on libraries like webpack or gulp, although this doesn't want to replace them, but is evident how the need of them come less.
 
 ---
     
@@ -34,7 +34,7 @@ Even if we reconise a great value on libraries like webpack or gulp, althought t
 
 **Prerequisite**<br/>
 Monera works with `docker` containers, `make` files and `tar` streams to do all his 'magic'.
-But for local development use also `fswatch` and `browsersync` (a nodejs dependecie).
+But for local development use `fswatch` and `browsersync` (a nodejs dependecie).
 
 **Mandatory**
 - [`docker`](https://www.docker.com/products/overview) || ```curl -o https://get.docker.com/ | sh```;
@@ -86,9 +86,83 @@ compile it and profit!
 ./.monera/monera compile-content
 ```
 
+... and since I get [inspired](https://blog.jessfraz.com/post/docker-containers-on-the-desktop/)...
+You can also run **Atom** on it!
+```
+./.monera/monera atom
+```
+(although you need `xQuartz` and `socat` to make it work)
+
 ---
 
-## Contributing
+## How does it work?
+![Containerised life](http://i.giphy.com/6AFldi5xJQYIo.gif)
+
+The idea is that each container gets only one job to get done similar to a service / domain model.
+The way we split responsibilities is nothing new for people that already work with microservices.
+
+Monera tries to learn from microservices and tries to define a model (or contract) for interoperability. Focusing in how Preprocessors should work in a containerised environment.
+
+In short a container should be able to handle a tar stream has an input and should return another tar stream.
+
+```
++---------------------+ +------------------------------------+ +--------------------+
+|                     | |                                    | |                    |
+|                     | |         C O N T A I N E R          | |                    |
+|    S R C  T A R     | |                                    | |   D E S T  T A R   |
+|                     | |                                    | |                    |
+|     S T R E A M     | |         +---------------+          | |     S T R E A M    |
+|                     | |         |               |          | |                    |
+|                     | |         |               |          | |                    |
++----------+----------+ |         |    T O O L    |          | +---------^----------+
+           |            |      +-->               +--+       |           |
+           |            |      |  |               |  |       |           |
+           |            |      |  |               |  |       |           |
+           |            |      |  +---------------+  |       |           |
+           |            |      |                     |       |           |
+           |            |  +---+----------+  +-------v-----+ |           |
+           |            |  |              |  |             | |           |
+           |            |  |              |  |             | |           |
+           |            |  |              |  |             | |           |
+           +--------------->     S R C    |  |   D I S T   +-------------+
+                        |  |              |  |             | |
+                        |  |              |  |             | |
+                        |  +--------------+  +-------------+ |
+                        |                                    |
+                        +------------------------------------+
+```
+
+With a model like this we're able to chain the containers and pass our code from one to another by being dependencies free in our host machine.
+
+## Why?
+![Why?](http://i.giphy.com/bw5OY9zTKlOHS.gif)
+The web is constantly saturated with new tools that pops up to keep your development much fancier than it was before. Shaming on all you've done until now.
+
+... said by the new *'cool tool'*...
+
+It's frustrating keep always up to date to the latest hype and technology and scaffolding your new project. Ending up spending 30% of your development time in looking for appropriated tools.
+
+We stand to solidity has base for our container; containers reinforce the concepts of static.
+And static is a good thing, computationally speaking.
+
+Although our performance and MB numbers aren't that exciting; we compromise them by gaining portability and flexibility.
+
+In fact we think that compilers don't deserve to be part of our package.json. But rather a binary installed in your system or in our case a container.
+
+Giving us the opportunity to real cherry pick the values of our tools and dependencies.
+
+## Why should I use and trust it?
+For now this is just a fun experiment, but we believe that is ready for production now.
+Monera is based upon tools that have already hundreds (if not thousand) of production stories, that you might be already using.
+
+Monera is not a software itself but rather an approach or a way of doing things.
+You should give it a try because can really boost your productivity by providing tools of tomorrow in solid and portable way, today.
+
+Companies and [developers](https://muffinresearch.co.uk/tips-for-building-a-dev-env-with-docker/) are already working in similars manners.
+
+Monera is just a way of sharing those experiences by improving together our daily life tools.
+
+## How I can create / submit my 'organisms'?
 We suggest to take a look to the Organism list bellow that monera is officially compose by.
 Or you can suggest/submit new Organism.
 
@@ -115,15 +189,16 @@ Now you can do your changes in the content, and when you save them they would be
 
 ---
 
-## Create your first website with Travis and Github Pages
-This documentation is a live example in how you could change your
+## Some sugar left? 
+*Shh...!* ***You can build a static website with Travis and Github Pages***
 
   1. Fork it!
-  2. Create a [GitHub Authentication token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
-  3. Add your repository to travis.
-  4. Add your `GH_TOKEN` to travis `travis encrypt GH_TOKEN=secretvalue`
-  5. Commit and push.
-  6. Enjoy your website at `http://<username>.github.io/<repo-name>/`
+  2. Change the README.md
+  3. Create a [GitHub Authentication token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)
+  4. Add your repository to travis.
+  5. Add your `GH_TOKEN` to travis `travis encrypt GH_TOKEN=secretvalue`
+  6. Commit and push.
+  7. Enjoy your website at `http://<username>.github.io/<repo-name>/`
 
 Every change on master would recreate your gh-pages branch. Enjoy :-)
 
