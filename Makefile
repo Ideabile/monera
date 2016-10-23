@@ -232,8 +232,8 @@ help: ## This help
 	echo ${bar}
 
 _get-task:
-	@echo "[\n" && \
-grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "{\"name\": \"%s\", \"desc\": \"%s\" },\n", $$1, $$2}' && \
+	@echo "export default [\n" && \
+grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  {\"name\": \"%s\", \"desc\": \"%s\" },\n", $$1, $$2}' && \
 	echo "\n]"
 # END
 

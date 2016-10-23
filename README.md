@@ -1,16 +1,21 @@
 # Monera [![Build Status](https://travis-ci.org/Ideabile/monera.svg?branch=master)](https://travis-ci.org/Ideabile/monera)
+## [Currently under development]
 Kingdom that contained unicellular organisms.
 
-Monera is a customisable containerised swissknife for modern web developers tecnology.
+Monera is a customisable containerised swissknife for modern web developers.
+<div id="cmds">
+</div>
 
 Helps you in being more focus on code instead of project scaffolding and setups.
-By helping you in create solid rule that can be used from local development or shipped into your CI or Cloud system.
+By helping you in create solid rule that can be used from local development or shipped into your CI Cloud System.
 
 Because simply it works.
 
 <script type="text/javascript" src="https://asciinema.org/a/bzuj6ef4b3qqbp0lf1ti0mflj.js" id="asciicast-bzuj6ef4b3qqbp0lf1ti0mflj" data-autoplay="true" async></script>
 
 ## What is provided?
+![Hipster tools](http://i.giphy.com/vfKVWywzbRu3C.gif)
+
 Some of the most hipster tools:
   - super **js** powers: **es6, bundling, minification** with *babeljs, browserify, uglify*
   - super **css** powers with *node-sass*
@@ -26,6 +31,20 @@ Even if we reconise a great value on libraries like webpack or gulp, althought t
 ---
     
 ## How to setup
+
+**Prerequisite**<br/>
+Monera works with `docker` containers, `make` files and `tar` streams to do all his 'magic'.
+But for local development use also `fswatch` and `browsersync` (a nodejs dependecie).
+
+**Mandatory**
+- [`docker`](https://www.docker.com/products/overview) || ```curl -o https://get.docker.com/ | sh```;
+- [`make`](https://www.gnu.org/software/make/) || `sudo apt-get install make` || `brew install make`;
+
+**Development**
+- [`nodejs`](https://nodejs.org/)
+- [`npm install -g browsersync`](https://www.browsersync.io/) || `monera install-dev`
+- [`fswatch`](emcrisostomo.github.io/fswatch/) -> `monera install-dev`
+
 If you're starting from zero:
 ```
 mkdir <my-project> && cd <my-project> && git init
