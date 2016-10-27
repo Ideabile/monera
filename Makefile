@@ -9,6 +9,7 @@ SRC ?=$(BASEPATH)src/
 DEST ?=$(BASEPATH)dist/
 
 CONTAINERSPATH ?=$(realpath .)/containers/
+RELATIVE_CONTAINERS_PATH ?=${shell echo $(CONTAINERSPATH) | sed -e "s;^$(BASEPATH);;"}
 
 DEST_JS ?=$(DEST)js/
 SRC_JS ?=$(SRC)js/
@@ -30,14 +31,15 @@ $(echo $(PACKAGE_MAIN))
 
 ${COMPILERS}: ## Build container
 		@echo "\n\n--- Building container:$(@)"; \
-		docker build -t monera-${@} -f ${CONTAINERSPATH}${@}/Dockerfile .
+		echo "$(RELATIVE_CONTAINERS_PATH)"; \
+		docker build -t monera-${@} --build-arg CONTAINERS_PATH=${RELATIVE_CONTAINERS_PATH} -f ${CONTAINERSPATH}${@}/Dockerfile ${PWD}
 
 build-compilers: ${COMPILERS} ## Build all the compilers
 
 build: build-compilers modules
 
 modules: ## Build the Package.json in a specific container
-		@docker build -t ${PACKAGE_NAME}-modules -f ${CONTAINERSPATH}modules/Dockerfile .
+		@docker build -t ${PACKAGE_NAME}-modules --build-arg CONTAINERS_PATH=${RELATIVE_CONTAINERS_PATH} -f ${CONTAINERSPATH}modules/Dockerfile ${PWD}
 
 # END
 

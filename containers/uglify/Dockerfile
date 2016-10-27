@@ -3,6 +3,7 @@ FROM monera-base
 ENV CONTAINER="uglify"
 ENV PACKAGE="uglify-js"
 ENV BIN="uglifyjs"
+ARG CONTAINERS_PATH="."
 
 WORKDIR /
 RUN npm install -g $PACKAGE
