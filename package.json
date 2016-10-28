@@ -23,7 +23,6 @@
     "vue": "^2.0.3"
   },
   "devDependencies": {
-    "commander": "^2.9.0",
     "inquirer": "^1.2.2",
     "try-thread-sleep": "^1.0.0"
   }

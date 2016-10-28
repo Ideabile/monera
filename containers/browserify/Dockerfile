@@ -3,6 +3,7 @@ FROM monera-base
 ENV CONTAINER="browserify"
 ENV PACKAGE="browserify"
 ENV BIN=$PACKAGE
+ARG CONTAINERS_PATH="."
 
 WORKDIR /
 RUN npm install -g $PACKAGE
