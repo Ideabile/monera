@@ -31,7 +31,6 @@ $(echo $(PACKAGE_MAIN))
 
 ${COMPILERS}: ## Build container
 		@echo "\n\n--- Building container:$(@)"; \
-		echo "$(RELATIVE_CONTAINERS_PATH)"; \
 		docker build -t monera-${@} --build-arg CONTAINERS_PATH=${RELATIVE_CONTAINERS_PATH} -f ${CONTAINERSPATH}${@}/Dockerfile ${PWD}
 
 build-compilers: ${COMPILERS} ## Build all the compilers
