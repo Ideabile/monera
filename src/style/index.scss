@@ -90,16 +90,21 @@ p img{
     margin: 50px 30px;
     background: #EFEFEF;
     padding: 30px;
+    overflow: hidden;
 
     pre{
         background: none;
         border: none;
         display: inline-block;
-        font-size: 20px;
+        font-size: 2.8vw;
         height: 100px;
         line-height: 100px;
         padding: 0 10px;
     }
+}
+
+pre code{
+    white-space: pre;
 }
 
 .cmds ol{
@@ -109,6 +114,9 @@ p img{
 
     li{
         display: none;
+        position: absolute;
+        top: 40px;
+        width: 100%;
 
         div{
             opacity: 0;
@@ -118,8 +126,8 @@ p img{
             -o-transition: opacity 500ms ease-out 1s;
             transition: opacity 500ms ease-out 1s;
             position: absolute;
-            top: 100px;
-            font-size: 1.5em;
+            top: 60px;
+            font-size: 3vw;
         }
 
         pre{

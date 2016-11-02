@@ -1,4 +1,5 @@
 export default [
+
   {"name": "browser-sync-start", "desc": "Runs browser-sync" },
   {"name": "build-compilers", "desc": "Build all the compilers" },
   {"name": "clean-content", "desc": "Clean the content" },
@@ -13,6 +14,7 @@ export default [
   {"name": "dev-install", "desc": "Install Dependencies for running dev mode" },
   {"name": "dev", "desc": "Dev mode watch changes and run compilers" },
   {"name": "help", "desc": "This help" },
+  {"name": "init", "desc": "Init Monera inside a project" },
   {"name": "modules", "desc": "Build the Package.json in a specific container" },
   {"name": "publish-travis", "desc": "Publish with travis" },
   {"name": "publish", "desc": "Publish" },
@@ -20,5 +22,6 @@ export default [
   {"name": "stop-modules", "desc": "Stop shared volumes for package.json" },
   {"name": "test-js-buffer", "desc": "Test compiler just with buffers" },
   {"name": "test-js-dir", "desc": "Test to compile dir" },
-  {"name": "test", "desc": "Test the compilers" }
+  {"name": "test", "desc": "Test the compilers" },
+
 ]

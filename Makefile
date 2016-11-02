@@ -28,6 +28,8 @@ PACKAGE_MAIN =$(shell cat "$(BASEPATH)package.json" | grep main | head -1 | awk 
 $(echo $(PACKAGE_MAIN))
 
 # START --- Build Containers
+init: ## Init Monera inside a project
+	@cd ${BASEPATH} && curl https://gist.githubusercontent.com/M3kH/ae0771dcac80aca1166fbdaa0ee02aea/raw/install.sh | sh
 
 ${COMPILERS}: ## Build container
 		@echo "\n\n--- Building container:$(@)"; \

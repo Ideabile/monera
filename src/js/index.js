@@ -11,7 +11,7 @@ Vue.component('cmd-item', {
 })
 
 const Cmds = Vue.extend({
-  template: `<div class="cmds"><pre>$>./.monera/monera</pre><ol><cmd-item v-for="(cmd, i) in cmds.list" v-bind:active="cmds.active" v-bind:index="i" v-bind:cmd="cmd"></cmd-item></ol></div>`,
+  template: `<div class="cmds"><pre>monera</pre><ol><cmd-item v-for="(cmd, i) in cmds.list" v-bind:active="cmds.active" v-bind:index="i" v-bind:cmd="cmd"></cmd-item></ol></div>`,
   methods: {
     switchCmd: function(){
       this.cmds.list[this.cmds.active].active = false
