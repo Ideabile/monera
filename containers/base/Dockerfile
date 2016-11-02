@@ -3,7 +3,7 @@ FROM mhart/alpine-node:latest
 VOLUME ["/logs"]
 
 ENV TYPE="tar"
-ARG CONTAINERS_PATH="."
+ARG CONTAINERS_PATH="./containers"
 
 ADD ${CONTAINERS_PATH}/base/EntryPoint.sh /EntryPoint.sh
 RUN chmod +x /EntryPoint.sh
