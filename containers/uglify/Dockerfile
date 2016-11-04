@@ -1,4 +1,4 @@
-FROM monera-base
+FROM ideabile/monera-base:latest
 
 ENV CONTAINER="uglify"
 ENV PACKAGE="uglify-js"
