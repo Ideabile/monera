@@ -3,7 +3,7 @@ FROM ideabile/monera-base:latest
 ENV CONTAINER="uglify"
 ENV PACKAGE="uglify-js"
 ENV BIN="uglifyjs"
-ARG CONTAINERS_PATH="."
+ARG CONTAINERS_PATH="./containers"
 
 WORKDIR /
 RUN npm install -g $PACKAGE

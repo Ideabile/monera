@@ -11,7 +11,7 @@ RUN apk add --update \
 ENV CONTAINER="sass"
 ENV PACKAGE="node-sass"
 ENV BIN=$PACKAGE
-ARG CONTAINERS_PATH="."
+ARG CONTAINERS_PATH="./containers"
 
 RUN npm install mkdirp
 RUN npm install $PACKAGE

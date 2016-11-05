@@ -3,7 +3,7 @@ FROM node:latest
 
 ENV PROJECT_PATH="."
 WORKDIR /monera
-ARG CONTAINERS_PATH="."
+ARG CONTAINERS_PATH="./containers"
 
 ADD "${BASEPATH_PATH}/package.json" /monera/package.json
 

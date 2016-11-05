@@ -3,7 +3,7 @@ FROM ideabile/monera-base:latest
 ENV CONTAINER="browserify"
 ENV PACKAGE="browserify"
 ENV BIN=$PACKAGE
-ARG CONTAINERS_PATH="."
+ARG CONTAINERS_PATH="./containers"
 
 WORKDIR /
 RUN npm install -g $PACKAGE
