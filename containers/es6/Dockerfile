@@ -3,7 +3,7 @@ FROM ideabile/monera-base:latest
 ENV CONTAINER="es6"
 ARG CONTAINERS_PATH="./containers"
 
-ADD ${CONTAINERS_PATH}/${CONTAINER}/package.json" "/monera/package.json"
+ADD "${CONTAINERS_PATH}/${CONTAINER}/package.json" "/monera/package.json"
 RUN npm install
 
 ENV PACKAGE="babel-cli"
