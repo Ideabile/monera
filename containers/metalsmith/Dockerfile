@@ -4,7 +4,7 @@ ENV CONTAINER="metalsmith"
 ENV PACKAGE=$CONTAINER
 ENV BIN=$PACKAGE
 
-ARG CONTAINERS_PATH="."
+ARG CONTAINERS_PATH="./containers"
 
 
 ADD ${CONTAINERS_PATH}/${BIN}/package.json /monera/package.json
